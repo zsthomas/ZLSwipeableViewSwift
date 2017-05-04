@@ -112,8 +112,12 @@ class ViewManager : NSObject {
     func handlePan(_ recognizer: UIPanGestureRecognizer) {
         guard let swipeableView = swipeableView else { return }
         
-        let translation = recognizer.translation(in: containerView)
-        let location = recognizer.location(in: containerView)
+        var translation = recognizer.translation(in: containerView)
+        var location = recognizer.location(in: containerView)
+        if swipeableView.isVerticalPanDisabled {
+            location.y = containerView.bounds.height/2 - abs(translation.x * 0.2)
+            translation.y = containerView.bounds.height * 0.2
+        }
         let velocity = recognizer.velocity(in: containerView)
         let movement = Movement(location: location, translation: translation, velocity: velocity)
         
